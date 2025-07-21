@@ -1,0 +1,45 @@
+interface IBlock {
+    valid: boolean,
+    tag: number,
+    data: number[]
+}
+
+interface ICache {
+    lookup: (address: number) => number
+}
+
+const RAM: number[] = [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+]
+
+class DirectMappingCache implements ICache {
+    blocks: IBlock[]
+
+    constructor(size: number) {
+        this.blocks = Array.from({ length: size }, () => ({
+            valid: false,
+            tag: 0,
+            data: [0]
+        }));
+
+
+        console.log(this.blocks)
+    }
+
+    lookup(address: number): number {
+        let index = (address & 0xE) >> 1;
+        let tag = address & 0x1;
+
+        let block = this.blocks[index];
+
+        if (block.valid && block.tag == tag) {
+            return block.data[0];
+        }
+
+        block.valid = true;
+        block.tag = tag;
+        block.data = [RAM[address]];
+
+        return block.data[0];
+    }
+}
