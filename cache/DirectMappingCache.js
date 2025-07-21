@@ -1,13 +1,16 @@
-var RAM = [
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
-];
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DirectMappingCache = void 0;
+var ram_1 = require("./ram");
 var DirectMappingCache = /** @class */ (function () {
     function DirectMappingCache(size) {
-        this.blocks = Array.from({ length: size }, function () { return ({
-            valid: false,
-            tag: 0,
-            data: [0]
-        }); });
+        for (var i = 0; i < size; i++) {
+            this.blocks.push({
+                valid: false,
+                tag: 0,
+                data: [0]
+            });
+        }
         console.log(this.blocks);
     }
     DirectMappingCache.prototype.lookup = function (address) {
@@ -19,8 +22,9 @@ var DirectMappingCache = /** @class */ (function () {
         }
         block.valid = true;
         block.tag = tag;
-        block.data = [RAM[address]];
+        block.data = [ram_1.RAM[address]];
         return block.data[0];
     };
     return DirectMappingCache;
 }());
+exports.DirectMappingCache = DirectMappingCache;
