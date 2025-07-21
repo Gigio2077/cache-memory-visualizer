@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<div class="grid-container">
+
+    <div id="menu">
+        <label for="cacheWords">Total cache words:</label>
+        <select id="cacheWords">
+            <option value="">-- Select --</option>
+            <option value="8">8</option>
+            <option value="16">16</option>
+            <option value="32">32</option>
+        </select>
+
+        <label for="associativity">Associativity:</label>
+        <select id="associativity">
+            <option value="">-- Select --</option>
+            <option value="1">Direct-mapped (1-way)</option>
+            <option value="2">2-way</option>
+            <option value="4">4-way</option>
+            <option value="8">8-way</option>
+        
+        </select>
+
+        <label for="wordsPerBlock">Words per block:</label>
+        <select id="wordsPerBlock">
+            <option value="">-- Select --</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="8">8</option>
+        </select>
+    </div>
+
+    <div id="cacheTable">
+        <table>
+            <caption>Cache</caption>
+                <thead id="cacheTableHeader">
+                    <!-- header populated by buildCacheHeader() function in display.js -->
+                </thead>
+                <tbody id="cacheTableBody">
+                    <!-- body populated by populateCacheTable() function in display.js -->
+                </tbody>
+        </table>
+    </div>
+
+    <div id="memoryTable">
+        <table>
+            <caption>Memory</caption>
+            <thead id="memoryTableHeader">
+                <tr>
+                    <th>Address</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody id="memoryTableBody">
+                <tr>
+                    <td>0</td>
+                    <td>50</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>30</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+<script type="module" src="classes.js"></script>
+<script type="module" src="display.js"></script>
+</body>
+</html>
