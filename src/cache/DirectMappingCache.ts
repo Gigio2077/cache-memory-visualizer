@@ -9,7 +9,7 @@ export class DirectMappingCache implements ICache {
     bytes_per_block: number;
     block_count: number;
 
-    onChange?: () => void;
+    reRender?: () => void;
 
     constructor(block_count: number, bytes_per_block: number) {
         this.blocks = Array.from({ length: block_count }, function () { return ({
@@ -42,6 +42,7 @@ export class DirectMappingCache implements ICache {
         let block = this.blocks[line_location];
 
         if (block.valid && block.tag == tag) {
+            this.reRender?.();
             return block.data[byte_location];
         }
 
@@ -54,7 +55,7 @@ export class DirectMappingCache implements ICache {
         this.blocks[line_location].valid = true;
         this.blocks[line_location].tag = tag;
 
-        this.onChange?.();
+        this.reRender?.();
         return this.blocks[line_location].data[offset];
     }
 }
