@@ -4,11 +4,14 @@ const RAM: number[] = Array.from( { length: 256 }, (_, i) => i);
 const ADDRESS_SIZE: number = 8
 
 // http://www.vlsiip.com/cache/Direct-Mapped-Cache.html
-class NWayAssociativeCache implements ICache {
+export class NWayAssociativeCache implements ICache {
     blocks: IBlock[][];
     line_count: number;
     nway: number;
     bytes_per_block: number;
+
+    reRender?: () => void;
+
 
     constructor(line_count: number, nway: number, bytes_per_block: number) {
         this.blocks = Array.from( { length: line_count }, () => {

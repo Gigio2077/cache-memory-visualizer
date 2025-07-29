@@ -8,12 +8,12 @@ function RamViewLine( {address, data} : { address: number, data: number }) {
 }
 
 export default function RamView() {
-    const RAM: number[] = Array.from({ length: 4 }, (_, i) => i);
+    const RAM: number[] = Array.from({ length: 8 }, (_, i) => i);
 
     return (
         <div class="overflow-x-auto">
             <table class="table-auto border-collapse border border-gray-400 text-sm">
-                <thead class="bg-gray-200">
+                <thead class="bg-gray-400">
                     <tr>
                         <th class="border border-gray-400 px-4 py-2">Address</th>
                         <th class="border border-gray-400 px-4 py-2">Data</th>

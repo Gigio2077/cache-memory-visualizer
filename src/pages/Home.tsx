@@ -1,8 +1,11 @@
+import NavBarSimple from "../component/NavBarSimple";
+import Article from "../component/Article";
+
 export default function Home() {
     return (
-
-        <button>
-            <a href="/direct-mapped-cache">DM</a>
-        </button>
+        <>
+            <NavBarSimple/>
+            <Article/>
+        </>
     )
 }

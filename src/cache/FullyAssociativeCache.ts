@@ -3,10 +3,13 @@ import { IBlock, ICache } from "./Interfaces";
 const RAM: number[] = Array.from( { length: 256 }, (_, i) => i);
 const ADDRESS_SIZE: number = 8
 
-class FullyAssociativeCache implements ICache {
+export class FullyAssociativeCache implements ICache {
     blocks: IBlock[];
     bytes_per_block: number;
     block_count: number;
+
+    reRender?: () => void;
+
 
     constructor(block_count: number, bytes_per_block: number) {
         this.blocks = Array.from( { length: block_count }, () => {

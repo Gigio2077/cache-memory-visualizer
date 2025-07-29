@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import CacheView from './component/CacheView';
 import RamView from './component/RamView';
 
-import Home from './pages/home';
+import Home from './pages/Home';
 import DM from './pages/DM';
 
 export function App() {
@@ -20,12 +20,11 @@ export function App() {
 	}, []);
 
 	return (
-		
-		
 		<LocationProvider>
 			<Router>
-				<Route path="/" component={Home}/> 
-				<Route path="/direct-mapped-cache" component={DM}/>
+				<Route path="/" component={Home} />
+				<Route path="/direct-mapped-cache" component={DM} />
+				
 				{/* <Route path="/fully-associative-cache"></Route>
 				<Route path="/n-way-cache"></Route> */}
 			</Router>
