@@ -7,7 +7,7 @@ import NavBarSimple from "../component/NavBarSimple";
 
 export default function DM() {
 
-    let cache = useRef(new DirectMappingCache(8, 2));
+    let cache = useRef(new DirectMappingCache(4, 1));
     const [state, forceUpdate] = useState(0);
     const [address, setAddress] = useState(0);
 
@@ -22,7 +22,7 @@ export default function DM() {
             </div>
             <div className="flex items-center justify-center h-screen gap-25">
                 <CacheView cache={cache.current} />
-                <RamView />
+                <RamView onAddressClick={(addr) => cache.current.lookup(addr)} />
             </div>
         </>
     )
