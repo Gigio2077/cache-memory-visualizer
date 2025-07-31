@@ -6,7 +6,6 @@ import NavBarSimple from "../component/NavBarSimple";
 import MemLoadsUI from "../component/MemLoadsUI";
 import { BinString } from "../util/util";
 import { AnimationContext } from "../context/animationContext";
-import { preview } from "vite";
 
 export default function DM() {
     let cache = useRef(new DirectMappingCache(8, 2));
@@ -36,8 +35,8 @@ export default function DM() {
                 const [data, result] = cache.current.lookup(address);
                 lookUpResult = result
                 animation.setHighLightLine(data);
-
-                if (lookUpResult == 'miss')
+    
+                if (lookUpResult == 'miss') 
                     animation.setKeyframe(3);
                 else
                     animation.setKeyframe(2);
@@ -51,35 +50,32 @@ export default function DM() {
         ];
 
         animation.setIsRunning(true);
-        // animation.setKeyframe(0);
+        animation.setKeyframe(0);
 
         console.log(animation);
 
-        setTimeout(() => {
-            keyframes[animation.keyframe]()
-            console.log("Passo: ", animation.keyframe)
-        }, 500);
-        setTimeout(() => {
-            keyframes[animation.keyframe]()
-            console.log("Passo: ", animation.keyframe)
-        }, 1000);
+        for (let i = 0; i < 2; i++) {
+            setTimeout(() => {
+                console.log("Passo: ", animation.keyframe)
+                keyframes[animation.keyframe]()
+            }, (i+1)*500);
+        }
     }
-}
 
-return (
-    <>
-        <NavBarSimple />
-        <MemLoadsUI
-            onButtonClick={buttonHandler}
-            setA={(s) => setAddress(s)}
-        />
-        {BinString(address)}
-        keyframe: {animation.keyframe}
+    return (
+        <>
+            <NavBarSimple />
+            <MemLoadsUI
+                onButtonClick={buttonHandler}
+                setA={(s) => setAddress(s)}
+            />
+            {BinString(address)}
+            keyframe: {animation.keyframe}
 
-        <div className="flex items-center justify-center h-screen gap-25">
-            <CacheView cache={cache.current} />
-            <RamView onAddressClick={(addr) => cache.current.lookup(addr)} />
-        </div>
-    </>
-)
+            <div className="flex items-center justify-center h-screen gap-25">
+                <CacheView cache={cache.current} />
+                <RamView onAddressClick={(addr) => cache.current.lookup(addr)} />
+            </div>
+        </>
+    )
 }
