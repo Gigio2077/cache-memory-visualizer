@@ -1,10 +1,12 @@
+import { hexString } from "../util/util";
+
 function RamViewLine( {address, data, onAddressClick} : { address: number, data: number, onAddressClick?: (addr: number) => void }) {
     return (
         <tr>
             <td 
                 class="border border-white-400 px-4 py-2 text-center"
                 onClick={() => onAddressClick?.(address)}>
-                {address}
+                {hexString(address)}
             </td>
             <td class="border border-white-400 px-4 py-2 text-center">{data}</td>
         </tr>
@@ -12,7 +14,7 @@ function RamViewLine( {address, data, onAddressClick} : { address: number, data:
 }
 
 export default function RamView({ onAddressClick }: { onAddressClick?: (addr: number) => void }) {
-    const RAM: number[] = Array.from({ length: 12 }, (_, i) => i);
+    const RAM: number[] = Array.from({ length: 16 }, (_, i) => i);
 
     return (
         <div class="overflow-x-auto">

@@ -23,7 +23,7 @@ export default function NavBarSimple() {
         className={`flex-col md:flex md:flex-row md:items-center md:space-x-6 ${isOpen ? "flex" : "hidden"}`}>
         <a href="/" className="block px-3 py-2 text-gray-600 hover:text-blue-500">About</a>
         <a href="/direct-mapped-cache" className="block px-3 py-2 text-gray-600 hover:text-blue-500">Direct Mapped</a>
-        <a href="#" className="block px-3 py-2 text-gray-600 hover:text-blue-500">N-Way associative</a>
+        <a href="/n-way" className="block px-3 py-2 text-gray-600 hover:text-blue-500">N-Way associative</a>
         <a href="#" className="block px-3 py-2 text-gray-600 hover:text-blue-500">Fully Associative</a>
 
         {/* LinkedIn links dropdown hover */}
