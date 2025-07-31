@@ -5,6 +5,6 @@ export interface IBlock {
 }
 
 export interface ICache {
-    lookup: (address: number) => number;
+    lookup: (address: number) => [number, 'hit' | 'miss'];
     getBlocks: () => IBlock[][];
 }

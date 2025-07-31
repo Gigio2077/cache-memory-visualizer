@@ -4,29 +4,82 @@ import CacheView from "../component/CacheView";
 import RamView from "../component/RamView";
 import NavBarSimple from "../component/NavBarSimple";
 import MemLoadsUI from "../component/MemLoadsUI";
-import { createContext } from "preact";
-
-
+import { BinString } from "../util/util";
+import { AnimationContext } from "../context/animationContext";
+import { preview } from "vite";
 
 export default function DM() {
     let cache = useRef(new DirectMappingCache(8, 2));
-    const [state, forceUpdate] = useState(0);
+    const [, forceUpdate] = useState(0);
     const [address, setAddress] = useState(0);
+
+    const animation = useContext(AnimationContext);
 
     useEffect(() => {
         cache.current.reRender = () => forceUpdate(n => n + 1);
-    },
-        [])
+    }, [])
 
-    return (
-        <>
-            <NavBarSimple />
-            <MemLoadsUI />
-            
-            <div className="flex items-center justify-center h-screen gap-25">
-                <CacheView cache={cache.current} />
-                <RamView onAddressClick={(addr) => cache.current.lookup(addr)} />
-            </div>
-        </>
-    )
+    const buttonHandler = () => {
+        // busca na cache
+        // hit ou miss? (linha amarela)
+        // hit -> (linha verde e para)
+        // miss -> (linha vermelha e linha amarela na ram)
+        let lookUpResult: 'hit' | 'miss' | null = null;
+
+        const keyframes = [
+            () => {
+                lookUpResult = null;
+                animation.setHighLightLine(-1);
+                animation.setKeyframe(1);
+            },
+            () => {
+                const [data, result] = cache.current.lookup(address);
+                lookUpResult = result
+                animation.setHighLightLine(data);
+
+                if (lookUpResult == 'miss')
+                    animation.setKeyframe(3);
+                else
+                    animation.setKeyframe(2);
+            },
+            () => {
+
+            },
+            () => {
+                animation.setIsRunning(false);
+            }
+        ];
+
+        animation.setIsRunning(true);
+        // animation.setKeyframe(0);
+
+        console.log(animation);
+
+        setTimeout(() => {
+            keyframes[animation.keyframe]()
+            console.log("Passo: ", animation.keyframe)
+        }, 500);
+        setTimeout(() => {
+            keyframes[animation.keyframe]()
+            console.log("Passo: ", animation.keyframe)
+        }, 1000);
+    }
+}
+
+return (
+    <>
+        <NavBarSimple />
+        <MemLoadsUI
+            onButtonClick={buttonHandler}
+            setA={(s) => setAddress(s)}
+        />
+        {BinString(address)}
+        keyframe: {animation.keyframe}
+
+        <div className="flex items-center justify-center h-screen gap-25">
+            <CacheView cache={cache.current} />
+            <RamView onAddressClick={(addr) => cache.current.lookup(addr)} />
+        </div>
+    </>
+)
 }

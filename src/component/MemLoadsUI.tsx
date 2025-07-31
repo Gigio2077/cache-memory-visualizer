@@ -1,20 +1,25 @@
-import { useState } from "preact/hooks";
+import { Dispatch, StateUpdater, useState } from "preact/hooks";
 
-export default function MemLoadsUI({ onButtonClick }: { onButtonClick?: () => void }) {
+type MemLoadsUIProps = {
+    onButtonClick: () => void,
+    setA: (s: number) => void
+}
 
+export default function MemLoadsUI({ onButtonClick, setA }: MemLoadsUIProps) {
     const [text, setText] = useState("");
     const [error, setError] = useState("");
 
     const handleChange = (event: Event) => {
         const value = (event.target as HTMLInputElement).value;
-        let regexp = /[^0-9 ]/;
-        if (value.search(regexp) != -1) {
-            setError("Only numbers and spaces are allowed");
-        } else {
+        const n = Number(value)
+        if (n >= 0 && n <= 255) {
+            setText(value);
+            setA(Number(value));
             setError("");
         }
-        setText(value);
-
+        else {
+            setError("Out of range")
+        }
     };
 
     return (
@@ -27,7 +32,7 @@ export default function MemLoadsUI({ onButtonClick }: { onButtonClick?: () => vo
                 <input
                     class="border border-white-400 w-80 p-1"
                     id="addrInput"
-                    type="text"
+                    type="number"
                     value={text}
                     onChange={handleChange}
                     placeholder={"Write addresses such as 1 2 4 6 . . ."}
@@ -41,10 +46,7 @@ export default function MemLoadsUI({ onButtonClick }: { onButtonClick?: () => vo
                 }
                 <button class="border border-white-400 ml-2 px-4 py-1"
                     onClick={() => {
-                        if (error === "" && text) {
-                            onButtonClick?.();
-                        }
-
+                        onButtonClick?.();
                     }}>
                     RUN
                 </button>

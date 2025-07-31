@@ -9,6 +9,9 @@ export class DirectMappingCache implements ICache {
     bytes_per_block: number;
     block_count: number;
 
+    byte_location_num_bits: number;
+    line_location_num_bits: number;
+
     reRender?: () => void;
 
     constructor(block_count: number, bytes_per_block: number) {
@@ -24,30 +27,42 @@ export class DirectMappingCache implements ICache {
 
         this.bytes_per_block = bytes_per_block;
         this.block_count = block_count;
+
+        this.byte_location_num_bits = Math.log2(this.bytes_per_block);
+        this.line_location_num_bits = Math.log2(this.block_count);
     }
 
     getBlocks(): IBlock[][] {
         return this.blocks;
     }
 
-    lookup(address: number): number {
-        const byte_location_num_bits = Math.log2(this.bytes_per_block);
-        const byte_location_mask = Math.pow(2, byte_location_num_bits) - 1;
-        const byte_location = address & byte_location_mask;
+    getByteLocation(address: number): number {
+        const byte_location_mask = Math.pow(2, this.byte_location_num_bits) - 1;
+        return address & byte_location_mask;
+    }
 
+    getLineLocation(address: number): number {
         const line_location_num_bits = Math.log2(this.block_count);
-        const line_location_mask = (Math.pow(2, line_location_num_bits) - 1) << byte_location_num_bits;
-        const line_location = (address & line_location_mask) >> byte_location_num_bits;
+        const line_location_mask = (Math.pow(2, line_location_num_bits) - 1) << this.byte_location_num_bits;
+        return (address & line_location_mask) >> this.byte_location_num_bits;
+    }
 
-        const tag_num_bits = ADDRESS_SIZE - byte_location_num_bits - line_location_num_bits;
-        const tag_mask = (Math.pow(2, tag_num_bits) - 1) << (byte_location_num_bits + line_location_num_bits);
-        const tag = (address & tag_mask) >> (byte_location_num_bits + line_location_num_bits);
+    getTag(address): number {
+        const tag_num_bits = ADDRESS_SIZE - this.byte_location_num_bits - this.line_location_num_bits;
+        const tag_mask = (Math.pow(2, tag_num_bits) - 1) << (this.byte_location_num_bits + this.line_location_num_bits);
+        return (address & tag_mask) >> (this.byte_location_num_bits + this.line_location_num_bits);
+    }
+
+    lookup(address: number): [number, 'hit' | 'miss'] {
+        const byte_location = this.getByteLocation(address);
+        const line_location = this.getLineLocation(address);
+        const tag = this.getTag(address);
 
         let block = this.blocks[line_location][0];
 
         if (block.valid && block.tag == tag) {
             this.reRender?.();
-            return block.data[byte_location];
+            return [block.data[byte_location], 'hit'];
         }
 
         const ram_start_addr = address - (address % this.bytes_per_block);
@@ -60,6 +75,6 @@ export class DirectMappingCache implements ICache {
         this.blocks[line_location][0].tag = tag;
 
         this.reRender?.();
-        return this.blocks[line_location][0].data[offset];
+        return [this.blocks[line_location][0].data[offset], 'miss'];
     }
 }
