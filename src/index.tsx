@@ -9,21 +9,15 @@ import RamView from './component/RamView';
 
 import Home from './pages/Home';
 import DM from './pages/DM';
+import NWay from './pages/NWay';
 
 export function App() {
-	const [, forceUpdate] = useState(0);
-	const cache = useRef<DirectMappingCache>(new DirectMappingCache(8, 4));
-
-	useEffect(() => {
-		cache.current.reRender = () => forceUpdate(n => n + 1);
-		forceUpdate(n => n + 1);
-	}, []);
-
 	return (
 		<LocationProvider>
 			<Router>
 				<Route path="/" component={Home} />
 				<Route path="/direct-mapped-cache" component={DM} />
+				<Route path="/n-way" component={NWay} />
 				
 				{/* <Route path="/fully-associative-cache"></Route>
 				<Route path="/n-way-cache"></Route> */}

@@ -9,8 +9,7 @@ import { createContext } from "preact";
 
 
 export default function DM() {
-
-    let cache = useRef(new DirectMappingCache(4, 1));
+    let cache = useRef(new DirectMappingCache(8, 2));
     const [state, forceUpdate] = useState(0);
     const [address, setAddress] = useState(0);
 
@@ -18,6 +17,7 @@ export default function DM() {
         cache.current.reRender = () => forceUpdate(n => n + 1);
     },
         [])
+
     return (
         <>
             <NavBarSimple />
