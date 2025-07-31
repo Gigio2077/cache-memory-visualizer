@@ -1,30 +1,34 @@
 import { hydrate, LocationProvider, Route, Router, prerender as ssr } from 'preact-iso';
 
-import { DirectMappingCache } from './cache/DirectMappingCache';
-
 import './style.css';
-import { useEffect, useRef, useState } from 'preact/hooks';
-import CacheView from './component/CacheView';
-import RamView from './component/RamView';
+import { useState } from 'preact/hooks';
 
 import Home from './pages/Home';
 import DM from './pages/DM';
 import NWay from './pages/NWay';
+import { AnimationContext, AnimationContextType } from './context/animationContext';
 
 export function App() {
+	const [animation, setAnimation] = useState<AnimationContextType>({
+		isRunning: false,
+		keyframe: 0,
+		highLightLine: 0
+	})
+
 	return (
-		<LocationProvider>
-			<Router>
-				<Route path="/" component={Home} />
-				<Route path="/direct-mapped-cache" component={DM} />
-				<Route path="/n-way" component={NWay} />
-				
-				{/* <Route path="/fully-associative-cache"></Route>
+		<AnimationContext value={animation}>
+			<LocationProvider>
+				<Router>
+					<Route path="/" component={Home} />
+
+					<Route path="/direct-mapped-cache" component={DM} />
+					<Route path="/n-way" component={NWay} />
+
+					{/* <Route path="/fully-associative-cache"></Route>
 				<Route path="/n-way-cache"></Route> */}
-			</Router>
-		</LocationProvider>
-
-
+				</Router>
+			</LocationProvider>
+		</AnimationContext>
 	);
 }
 

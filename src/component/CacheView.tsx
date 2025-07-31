@@ -1,15 +1,19 @@
-import { useEffect, useState } from "preact/hooks";
+import { useContext, useEffect, useState } from "preact/hooks";
 import { IBlock, ICache } from "../cache/Interfaces";
 import { hexString } from "../util/util";
+import { AnimationContext } from "../context/animationContext";
 
 type CacheViewLineProps = {
     blocks: IBlock[];
+    line: number;
 };
 
-function CacheViewLine({ blocks }: CacheViewLineProps) {
+function CacheViewLine({ blocks, line }: CacheViewLineProps) {
+    const animationContext = useContext(AnimationContext);
+
     return (
-        <tr className="hover:bg-zinc-100 transition-colors">
-            {blocks.map((block, idx) => (
+        <tr className={`${animationContext.isRunning && animationContext.highLightLine == line ? "bg-white" : ""} hover:bg-zinc-100 transition-colors`}>
+            {blocks.map((block, index) => (
                 <>
                     <td className="px-4 py-2 text-center font-mono">
                         {block.valid ? (
@@ -39,10 +43,14 @@ function CacheViewLine({ blocks }: CacheViewLineProps) {
     );
 }
 
+type CacheViewProps = {
+    cache: ICache
+}
 
-export default function CacheView({ cache }: { cache: ICache }) {
+export default function CacheView({ cache }: CacheViewProps) {
     const [cacheSize, setCacheSize] = useState(0);
     const [blocks, setBlocks] = useState(cache.getBlocks());
+
 
     useEffect(() => {
         const updatedBlocks = cache.getBlocks();
@@ -75,7 +83,7 @@ export default function CacheView({ cache }: { cache: ICache }) {
                 </thead>
                 <tbody>
                     {blocks.map((block, i) => (
-                        <CacheViewLine key={i} blocks={block} />
+                        <CacheViewLine key={i} line={i} blocks={block} />
                     ))}
                 </tbody>
             </table>
