@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 
-export default function MemLoadsUI() {
+export default function MemLoadsUI({ onButtonClick }: { onButtonClick?: () => void }) {
 
     const [text, setText] = useState("");
     const [error, setError] = useState("");
@@ -8,12 +8,13 @@ export default function MemLoadsUI() {
     const handleChange = (event: Event) => {
         const value = (event.target as HTMLInputElement).value;
         let regexp = /[^0-9 ]/;
-        if (value.search(regexp)!= -1){
+        if (value.search(regexp) != -1) {
             setError("Only numbers and spaces are allowed");
-        }else{
+        } else {
             setError("");
-            setText(value);
         }
+        setText(value);
+
     };
 
     return (
@@ -38,7 +39,13 @@ export default function MemLoadsUI() {
                         <div class="absolute left-1/2 -top-2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-red-500" />
                     </div>)
                 }
-                <button class="border border-white-400 ml-2 px-4 py-1">
+                <button class="border border-white-400 ml-2 px-4 py-1"
+                    onClick={() => {
+                        if (error === "" && text) {
+                            onButtonClick?.();
+                        }
+
+                    }}>
                     RUN
                 </button>
             </div>
