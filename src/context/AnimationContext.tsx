@@ -2,19 +2,19 @@ import { createContext } from "preact"
 import { useState } from "preact/hooks";
 
 export type AnimationContextType = {
-    isRunning: boolean;
+    running: boolean;
     keyframe: number;
     highLightLine: number;
-    setIsRunning: (val: boolean) => void;
+    setRunning: (val: boolean) => void;
     setKeyframe: (val: number) => void;
     setHighLightLine: (val: number) => void;
 };
 
 export const AnimationContext = createContext<AnimationContextType>({
-    isRunning: false,
+    running: false,
     keyframe: 0,
     highLightLine: -1,
-    setIsRunning: () => {},
+    setRunning: () => {},
     setKeyframe: () => {},
     setHighLightLine: () => {}
 });
@@ -27,10 +27,10 @@ export function AnimationProvider({ children }: { children: preact.ComponentChil
     return (
         <AnimationContext.Provider
             value={{
-                isRunning,
+                running: isRunning,
                 keyframe,
                 highLightLine,
-                setIsRunning,
+                setRunning: setIsRunning,
                 setKeyframe,
                 setHighLightLine
             }}

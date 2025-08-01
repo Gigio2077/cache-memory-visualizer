@@ -6,35 +6,22 @@ import { useState } from 'preact/hooks';
 import Home from './pages/Home';
 import DM from './pages/DM';
 import NWay from './pages/NWay';
-import { AnimationContextType } from './context/animationContext';
+import { AnimationContextType, AnimationProvider } from './context/AnimationContext';
 
 export function App() {
-	const [running, setRunning] = useState(false);
-	const [keyframe, setKeyframe] = useState(0);
-	const [highLightLine, setHighLightLine] = useState(-1);
-
-	const [animation, setAnimation] = useState<AnimationContextType>({
-		isRunning: running,
-		keyframe: keyframe,
-		highLightLine: highLightLine,
-		setIsRunning: setRunning,
-		setKeyframe: setKeyframe,
-		setHighLightLine: setHighLightLine
-	})
-
 	return (
-		<LocationProvider>
-			<Router>
-				<Route path="/" component={Home} />
-				<Route path="/direct-mapped-cache" component={DM} />
-				<Route path="/n-way" component={NWay} />
-				
-				{/* <Route path="/fully-associative-cache"></Route>
+		<AnimationProvider>
+			<LocationProvider>
+				<Router>
+					<Route path="/" component={Home} />
+					<Route path="/direct-mapped-cache" component={DM} />
+					<Route path="/n-way" component={NWay} />
+
+					{/* <Route path="/fully-associative-cache"></Route>
 				<Route path="/n-way-cache"></Route> */}
-			</Router>
-		</LocationProvider>
-
-
+				</Router>
+			</LocationProvider>
+		</AnimationProvider>
 	);
 }
 

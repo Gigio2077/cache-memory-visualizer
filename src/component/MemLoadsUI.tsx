@@ -1,7 +1,7 @@
 import { Dispatch, StateUpdater, useState } from "preact/hooks";
 
 type MemLoadsUIProps = {
-    onButtonClick: () => void,
+    onButtonClick: (address: number) => void,
     setA: (s: number) => void
 }
 
@@ -46,7 +46,10 @@ export default function MemLoadsUI({ onButtonClick, setA }: MemLoadsUIProps) {
                 }
                 <button class="border border-white-400 ml-2 px-4 py-1"
                     onClick={() => {
-                        onButtonClick?.();
+                        const currentAddress = Number(text);
+                        if (!error && currentAddress >= 0 && currentAddress <= 255) {
+                            onButtonClick(currentAddress);
+                        }
                     }}>
                     RUN
                 </button>

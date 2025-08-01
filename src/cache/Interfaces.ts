@@ -1,3 +1,6 @@
+import { AddressDecoder } from "./AddressDecoder";
+import { Ram } from "./Ram";
+
 export interface IBlock {
     valid: boolean,
     tag: number,
@@ -5,6 +8,10 @@ export interface IBlock {
 }
 
 export interface ICache {
-    lookup: (address: number) => [number, 'hit' | 'miss'];
+    readonly decoder: AddressDecoder;
+    ram: Ram;
+
+    lookup(address: number): [number, 'hit' | 'miss']
+
     getBlocks: () => IBlock[][];
 }
