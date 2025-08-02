@@ -1,8 +1,29 @@
 import { hexString } from "../util/util";
+import { useContext, useState } from "preact/hooks";
+import { AnimationContext } from "../context/AnimationContext";
+import { useEffect } from "preact/hooks";
+
+
 
 function RamViewLine( {address, data, onAddressClick} : { address: number, data: number, onAddressClick?: (addr: number) => void }) {
+
+const { searchedAddress, lastLookupResult, keyframe } = useContext(AnimationContext);
+const [bgColor, setBgColor] = useState("");
+
+    useEffect(() => {
+        if (searchedAddress === address) {
+            if (keyframe == 3 && lastLookupResult === 'miss') {
+                setBgColor("bg-zinc-100");
+            } else {
+                setBgColor("");
+            }
+        } else {
+            setBgColor("");
+        }
+    }, [searchedAddress, lastLookupResult, keyframe, address]);
+
     return (
-        <tr>
+        <tr class={`${bgColor} hover:bg-zinc-100 transition-colors`}>
             <td 
                 class="border border-white-400 px-4 py-2 text-center"
                 onClick={() => onAddressClick?.(address)}>

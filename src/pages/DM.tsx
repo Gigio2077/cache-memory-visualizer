@@ -10,7 +10,7 @@ import { startLookupAnimation } from "../animations/LookupAnimation";
 export default function DM() {
     let cache = useRef(new DirectMappingCache(8, 2));
     const [, forceUpdate] = useState(0);
-    const [address, setAddress] = useState(0);
+    const [addresses, setAddresses] = useState<number[]>([]);
 
     const animation = useContext(AnimationContext);
 
@@ -19,15 +19,27 @@ export default function DM() {
     }, [])
 
     const buttonHandler = () => {
-        startLookupAnimation(cache, address, animation);
-    };
+        let i = 0;
 
+        const runNext = () => {
+            if (i >= addresses.length) return;
+
+            startLookupAnimation(cache, addresses[i], animation);
+            i++;
+
+            // Espera o tempo da animação (~500ms × número de estados)
+            // Ajuste esse tempo para garantir que a animação termina antes de começar a próxima
+            setTimeout(runNext, 3000); 
+        };
+
+        runNext();
+    };
     return (
         <>
             <NavBarSimple />
             <MemLoadsUI
                 onButtonClick={buttonHandler}
-                setA={(s) => setAddress(s)}
+                setA={(s) => setAddresses(s)}
             />
 
             <div className="flex items-center justify-center h-screen gap-25">

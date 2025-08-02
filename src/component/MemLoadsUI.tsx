@@ -1,8 +1,8 @@
 import { Dispatch, StateUpdater, useState } from "preact/hooks";
 
 type MemLoadsUIProps = {
-    onButtonClick: (address: number) => void,
-    setA: (s: number) => void
+    onButtonClick: () => void,
+    setA: (s: number[]) => void
 }
 
 export default function MemLoadsUI({ onButtonClick, setA }: MemLoadsUIProps) {
@@ -11,15 +11,28 @@ export default function MemLoadsUI({ onButtonClick, setA }: MemLoadsUIProps) {
 
     const handleChange = (event: Event) => {
         const value = (event.target as HTMLInputElement).value;
-        const n = Number(value)
-        if (n >= 0 && n <= 255) {
-            setText(value);
-            setA(Number(value));
-            setError("");
+        setText(value);
+
+        // Verifica se só contém números e espaços
+        if (!/^[\d\s]*$/.test(value)) {
+            setError("Use apenas números e espaços");
+            return;
         }
-        else {
-            setError("Out of range")
+
+        const numbers = value
+            .trim()
+            .split(/\s+/)
+            .map(Number)
+            .filter((n) => !isNaN(n));
+
+        // Verifica se todos estão no intervalo válido
+        if (numbers.some(n => n < 0 || n > 255)) {
+            setError("Todos os números devem estar entre 0 e 255");
+            return;
         }
+
+        setError("");
+        setA(numbers); // Passa a lista para o componente pai
     };
 
     return (
@@ -32,7 +45,6 @@ export default function MemLoadsUI({ onButtonClick, setA }: MemLoadsUIProps) {
                 <input
                     class="border border-white-400 w-80 p-1"
                     id="addrInput"
-                    type="number"
                     value={text}
                     onChange={handleChange}
                     placeholder={"Write addresses such as 1 2 4 6 . . ."}
@@ -46,9 +58,8 @@ export default function MemLoadsUI({ onButtonClick, setA }: MemLoadsUIProps) {
                 }
                 <button class="border border-white-400 ml-2 px-4 py-1"
                     onClick={() => {
-                        const currentAddress = Number(text);
-                        if (!error && currentAddress >= 0 && currentAddress <= 255) {
-                            onButtonClick(currentAddress);
+                        if (!error) {
+                            onButtonClick();
                         }
                     }}>
                     RUN
