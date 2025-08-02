@@ -4,8 +4,12 @@ import { AnimationContext } from "../context/AnimationContext";
 import { useEffect } from "preact/hooks";
 
 
+type RamViewLineProps = {    
+    address: number;
+    data: number;
+}
 
-function RamViewLine( {address, data, onAddressClick} : { address: number, data: number, onAddressClick?: (addr: number) => void }) {
+function RamViewLine( {address, data} : RamViewLineProps) {
 
 const { searchedAddress, lastLookupResult, keyframe } = useContext(AnimationContext);
 const [bgColor, setBgColor] = useState("");
@@ -24,9 +28,7 @@ const [bgColor, setBgColor] = useState("");
 
     return (
         <tr class={`${bgColor} hover:bg-zinc-100 transition-colors`}>
-            <td 
-                class="border border-white-400 px-4 py-2 text-center"
-                onClick={() => onAddressClick?.(address)}>
+            <td class="border border-white-400 px-4 py-2 text-center">
                 {hexString(address)}
             </td>
             <td class="border border-white-400 px-4 py-2 text-center">{data}</td>
@@ -34,7 +36,7 @@ const [bgColor, setBgColor] = useState("");
     );
 }
 
-export default function RamView({ onAddressClick }: { onAddressClick?: (addr: number) => void }) {
+export default function RamView() {
     const RAM: number[] = Array.from({ length: 16 }, (_, i) => i);
 
     return (
@@ -48,7 +50,7 @@ export default function RamView({ onAddressClick }: { onAddressClick?: (addr: nu
                 </thead>
                 <tbody>
                     {
-                        RAM.map((data, addr) => <RamViewLine address={addr} data={data} onAddressClick={onAddressClick} />)
+                        RAM.map((data, addr) => <RamViewLine address={addr} data={data} />)
                     }
                 </tbody>
             </table>

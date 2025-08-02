@@ -44,7 +44,7 @@ export default function DM() {
 
             <div className="flex items-center justify-center h-screen gap-25">
                 <CacheView cache={cache.current} />
-                <RamView onAddressClick={(addr) => cache.current.lookup(addr)} />
+                <RamView />
             </div>
         </>
     )
