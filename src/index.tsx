@@ -1,12 +1,11 @@
 import { hydrate, LocationProvider, Route, Router, prerender as ssr } from 'preact-iso';
 
 import './style.css';
-import { useState } from 'preact/hooks';
 
 import Home from './pages/Home';
 import DM from './pages/DM';
 import NWay from './pages/NWay';
-import { AnimationContextType, AnimationProvider } from './context/AnimationContext';
+import { AnimationProvider } from './context/AnimationContext';
 
 export function App() {
 	return (

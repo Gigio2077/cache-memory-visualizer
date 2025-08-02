@@ -4,9 +4,8 @@ import CacheView from "../component/CacheView";
 import RamView from "../component/RamView";
 import NavBarSimple from "../component/NavBarSimple";
 import MemLoadsUI from "../component/MemLoadsUI";
-import { BinString } from "../util/util";
 import { AnimationContext } from "../context/AnimationContext";
-import { startDmAnimation } from "../animations/DMAnimation";
+import { startLookupAnimation } from "../animations/LookupAnimation";
 
 export default function DM() {
     let cache = useRef(new DirectMappingCache(8, 2));
@@ -20,7 +19,7 @@ export default function DM() {
     }, [])
 
     const buttonHandler = () => {
-        console.log(cache.current.lookup(address));
+        startLookupAnimation(cache, address, animation);
     };
 
     return (
@@ -30,8 +29,6 @@ export default function DM() {
                 onButtonClick={buttonHandler}
                 setA={(s) => setAddress(s)}
             />
-            {BinString(address)}
-            keyframe: {animation.keyframe}
 
             <div className="flex items-center justify-center h-screen gap-25">
                 <CacheView cache={cache.current} />

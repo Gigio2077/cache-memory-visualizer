@@ -9,15 +9,15 @@ interface StateConfig {
     next: AnimationState | ((result: 'hit' | 'miss' | null) => AnimationState) | null;
 }
 
-export const startDmAnimation = (cache: MutableRef<DirectMappingCache>, address: number, animation: AnimationContextType) => {
+export const startLookupAnimation = (cache: MutableRef<DirectMappingCache>, address: number, animation: AnimationContextType) => {
     let lookUpResult: 'hit' | 'miss' | null = null;
 
     const states: Record<AnimationState, StateConfig> = {
         INITIAL: {
             action: () => {
-                console.log("INITIAL");
                 animation.setHighLightLine(-1);
                 animation.setKeyframe(0);
+                animation.setLastLookupResult(null);
             },
             next: 'LOOKUP',
         },
@@ -26,7 +26,8 @@ export const startDmAnimation = (cache: MutableRef<DirectMappingCache>, address:
                 console.log("LOOKUP");
                 const [data, result] = cache.current.lookup(address);
                 lookUpResult = result;
-                animation.setHighLightLine(cache.current.getLineLocation(address));
+                animation.setLastLookupResult(result);
+                animation.setHighLightLine(cache.current.decoder.setIndex(address));
                 animation.setKeyframe(1);
             },
             next: (result: 'hit' | 'miss' | null) => result === 'hit' ? 'HIT' : 'MISS',
@@ -55,15 +56,12 @@ export const startDmAnimation = (cache: MutableRef<DirectMappingCache>, address:
         DONE: {
             action: () => {
                 console.log("DONE");
-                animation.setRunning(false);
             },
             next: null
         }
     };
 
     const runState = (currentState: AnimationState) => {
-        if (!animation.running) return;
-
         const config = states[currentState];
         if (!config) return;
 
@@ -74,10 +72,13 @@ export const startDmAnimation = (cache: MutableRef<DirectMappingCache>, address:
             : config.next;
 
         if (nextState) {
-            setTimeout(() => runState(nextState), 500);
+            setTimeout(() => {
+                if (currentState != 'DONE') {
+                    runState(nextState);
+                }
+            }, 500);
         }
     };
 
-    animation.setRunning(true);
-    runState('INITIAL');
+    setTimeout(() => runState('INITIAL'), 0);
 }

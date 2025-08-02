@@ -2,37 +2,37 @@ import { createContext } from "preact"
 import { useState } from "preact/hooks";
 
 export type AnimationContextType = {
-    running: boolean;
     keyframe: number;
     highLightLine: number;
-    setRunning: (val: boolean) => void;
+    lastLookupResult: 'hit' | 'miss' | null
     setKeyframe: (val: number) => void;
     setHighLightLine: (val: number) => void;
+    setLastLookupResult: (val: 'hit' | 'miss' | null) => void;
 };
 
 export const AnimationContext = createContext<AnimationContextType>({
-    running: false,
     keyframe: 0,
     highLightLine: -1,
-    setRunning: () => {},
+    lastLookupResult: null,
     setKeyframe: () => {},
-    setHighLightLine: () => {}
+    setHighLightLine: () => {},
+    setLastLookupResult: () => {}
 });
 
 export function AnimationProvider({ children }: { children: preact.ComponentChildren }) {
-    const [isRunning, setIsRunning] = useState(false);
     const [keyframe, setKeyframe] = useState(0);
-    const [highLightLine, setHighLightLine] = useState(0);
+    const [highLightLine, setHighLightLine] = useState(-1);
+    const [lastLookupResult, setLastLookupResult] = useState(null);
 
     return (
         <AnimationContext.Provider
             value={{
-                running: isRunning,
                 keyframe,
                 highLightLine,
-                setRunning: setIsRunning,
+                lastLookupResult,
                 setKeyframe,
-                setHighLightLine
+                setHighLightLine,
+                setLastLookupResult
             }}
         >
             {children}

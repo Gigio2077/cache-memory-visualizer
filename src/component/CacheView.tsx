@@ -9,10 +9,29 @@ type CacheViewLineProps = {
 };
 
 function CacheViewLine({ blocks, line }: CacheViewLineProps) {
-    const animationContext = useContext(AnimationContext);
+    const { highLightLine, keyframe, lastLookupResult } = useContext(AnimationContext);
+
+    const [bgColor, setBgColor] = useState("");
+
+    if (highLightLine === line) {
+        switch (lastLookupResult) {
+            case 'hit':
+                setBgColor("bg-green-400");
+                break;
+            case 'miss':
+                setBgColor("bg-red-400");
+                break;
+
+            default:
+                setBgColor("bg-slate-800");
+                break;
+        }
+    } else {
+        setBgColor("");
+    }
 
     return (
-        <tr className={`${animationContext.running && animationContext.highLightLine == line ? "bg-slate-800" : ""} hover:bg-zinc-100 transition-colors`}>
+        <tr className={`${bgColor} hover:bg-zinc-100 transition-colors`}>
             {blocks.map((block, index) => (
                 <>
                     <td className="px-4 py-2 text-center font-mono">
