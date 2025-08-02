@@ -17,7 +17,7 @@ export const startLookupAnimation = (cache: MutableRef<DirectMappingCache>, addr
             action: () => {
                 animation.setHighLightLine(-1);
                 animation.setKeyframe(0);
-                animation.setSearchedAddress(address);
+                animation.setRamLoadedAddr(Array.from({ length: cache.current.decoder.bytesPerBlock }, (_, i) => cache.current.getRamStartAddress(address) + i));
                 animation.setLastLookupResult(null);
             },
             next: 'LOOKUP',

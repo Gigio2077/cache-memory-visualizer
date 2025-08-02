@@ -11,11 +11,11 @@ type RamViewLineProps = {
 
 function RamViewLine( {address, data} : RamViewLineProps) {
 
-const { searchedAddress, lastLookupResult, keyframe } = useContext(AnimationContext);
+const { ramLoadedAddr, lastLookupResult, keyframe } = useContext(AnimationContext);
 const [bgColor, setBgColor] = useState("");
 
     useEffect(() => {
-        if (searchedAddress === address) {
+        if (ramLoadedAddr.includes(address)) {
             if (keyframe == 3 && lastLookupResult === 'miss') {
                 setBgColor("bg-zinc-100");
             } else {
@@ -24,7 +24,7 @@ const [bgColor, setBgColor] = useState("");
         } else {
             setBgColor("");
         }
-    }, [searchedAddress, lastLookupResult, keyframe, address]);
+    }, [ramLoadedAddr, lastLookupResult, keyframe, address]);
 
     return (
         <tr class={`${bgColor} hover:bg-zinc-100 transition-colors`}>

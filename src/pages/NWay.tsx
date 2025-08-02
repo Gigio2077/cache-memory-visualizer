@@ -65,7 +65,7 @@ export default function NWay() {
                 </MultiToggle>
             </div>
                 <CacheView cache={cache} />
-                <RamView onAddressClick={(addr) => { cache.lookup(addr); forceUpdate((n) => n + 1) }} />
+                <RamView />
             </div>
         </div>
     );

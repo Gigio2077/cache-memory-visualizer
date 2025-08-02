@@ -32,6 +32,10 @@ export class DirectMappingCache implements ICache {
         return this.blocks;
     }
 
+    getRamStartAddress(address: number): number {        
+        return address - (address % this.decoder.bytesPerBlock);
+    }
+
     lookup(address: number): [number, 'hit' | 'miss'] {
         const { tag, setIndex, byteOffset } = this.decoder.decode(address);
 
@@ -42,11 +46,9 @@ export class DirectMappingCache implements ICache {
             return [block.data[byteOffset], 'hit'];
         }
 
-        const bytesPerBlock = this.decoder.bytesPerBlock;
-        const ramStartAddress = address - (address % bytesPerBlock);
         
-        for (let i = 0; i < bytesPerBlock; i++) {
-            this.blocks[setIndex][0].data[i] = RAM[ramStartAddress + i];
+        for (let i = 0; i < this.decoder.bytesPerBlock; i++) {
+            this.blocks[setIndex][0].data[i] = RAM[this.getRamStartAddress(address) + i];
         }
         this.blocks[setIndex][0].valid = true;
         this.blocks[setIndex][0].tag = tag;
