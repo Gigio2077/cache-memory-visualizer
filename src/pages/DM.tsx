@@ -6,11 +6,12 @@ import NavBarSimple from "../component/NavBarSimple";
 import MemLoadsUI from "../component/MemLoadsUI";
 import { AnimationContext } from "../context/AnimationContext";
 import { startLookupAnimation } from "../animations/LookupAnimation";
+import AddressLookupInfoDisplay from "../component/AddressLookupInfoDisplay";
 
 export default function DM() {
     let cache = useRef(new DirectMappingCache(8, 2));
     const [, forceUpdate] = useState(0);
-    const [address, setAddress] = useState(0);
+    const [address, setAddress] = useState(-1);
 
     const animation = useContext(AnimationContext);
 
@@ -29,6 +30,9 @@ export default function DM() {
                 onButtonClick={buttonHandler}
                 setA={(s) => setAddress(s)}
             />
+            <div className="pt-2">
+                <AddressLookupInfoDisplay address={address} decoder={cache.current.decoder} />
+            </div>
 
             <div className="flex items-center justify-center h-screen gap-25">
                 <CacheView cache={cache.current} />

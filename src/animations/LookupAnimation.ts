@@ -1,5 +1,5 @@
-import { MutableRef } from "preact/hooks";
-import { AnimationContextType } from "../context/AnimationContext";
+import { MutableRef, useContext } from "preact/hooks";
+import { AnimationContext, AnimationContextType } from "../context/AnimationContext";
 import { DirectMappingCache } from "../cache/DirectMappingCache";
 
 type AnimationState = 'INITIAL' | 'LOOKUP' | 'HIT' | 'MISS' | 'RAM_LOOKUP' | 'DONE';
