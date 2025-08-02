@@ -1,11 +1,34 @@
 import { hexString } from "../util/util";
+import { useContext, useState } from "preact/hooks";
+import { AnimationContext } from "../context/AnimationContext";
+import { useEffect } from "preact/hooks";
 
-function RamViewLine( {address, data, onAddressClick} : { address: number, data: number, onAddressClick?: (addr: number) => void }) {
+
+type RamViewLineProps = {    
+    address: number;
+    data: number;
+}
+
+function RamViewLine( {address, data} : RamViewLineProps) {
+
+const { ramLoadedAddr, lastLookupResult, keyframe } = useContext(AnimationContext);
+const [bgColor, setBgColor] = useState("");
+
+    useEffect(() => {
+        if (ramLoadedAddr.includes(address)) {
+            if (keyframe == 3 && lastLookupResult === 'miss') {
+                setBgColor("bg-zinc-100");
+            } else {
+                setBgColor("");
+            }
+        } else {
+            setBgColor("");
+        }
+    }, [ramLoadedAddr, lastLookupResult, keyframe, address]);
+
     return (
-        <tr>
-            <td 
-                class="border border-white-400 px-4 py-2 text-center"
-                onClick={() => onAddressClick?.(address)}>
+        <tr class={`${bgColor} hover:bg-zinc-100 transition-colors`}>
+            <td class="border border-white-400 px-4 py-2 text-center">
                 {hexString(address)}
             </td>
             <td class="border border-white-400 px-4 py-2 text-center">{data}</td>
@@ -13,7 +36,7 @@ function RamViewLine( {address, data, onAddressClick} : { address: number, data:
     );
 }
 
-export default function RamView({ onAddressClick }: { onAddressClick?: (addr: number) => void }) {
+export default function RamView() {
     const RAM: number[] = Array.from({ length: 16 }, (_, i) => i);
 
     return (
@@ -27,7 +50,7 @@ export default function RamView({ onAddressClick }: { onAddressClick?: (addr: nu
                 </thead>
                 <tbody>
                     {
-                        RAM.map((data, addr) => <RamViewLine address={addr} data={data} onAddressClick={onAddressClick} />)
+                        RAM.map((data, addr) => <RamViewLine address={addr} data={data} />)
                     }
                 </tbody>
             </table>

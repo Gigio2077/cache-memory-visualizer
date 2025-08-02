@@ -17,6 +17,7 @@ export const startLookupAnimation = (cache: MutableRef<DirectMappingCache>, addr
             action: () => {
                 animation.setHighLightLine(-1);
                 animation.setKeyframe(0);
+                animation.setRamLoadedAddr(Array.from({ length: cache.current.decoder.bytesPerBlock }, (_, i) => cache.current.getRamStartAddress(address) + i));
                 animation.setLastLookupResult(null);
             },
             next: 'LOOKUP',
@@ -55,7 +56,8 @@ export const startLookupAnimation = (cache: MutableRef<DirectMappingCache>, addr
         },
         DONE: {
             action: () => {
-                console.log("DONE");
+                animation.setHighLightLine(-1);
+                console.log("DONE");    
             },
             next: null
         }
